@@ -37,7 +37,6 @@ typedef struct{
     char **names;
 } metadata;
 
-metadata get_metadata(char *file);
 
 typedef struct{
     int *leaf;
@@ -556,7 +555,6 @@ typedef struct{
 } box_label;
 
 
-network *load_network(char *cfg, char *weights, int clear);
 load_args get_base_args(network *net);
 
 void free_data(data d);
@@ -650,12 +648,10 @@ void load_weights_upto(network *net, char *filename, int start, int cutoff);
 
 void zero_objectness(layer l);
 void get_region_boxes(layer l, int w, int h, int netw, int neth, float thresh, float **probs, box *boxes, float **masks, int only_objectness, int *map, float tree_thresh, int relative);
-void free_network(network *net);
 void set_batch_network(network *net, int b);
 void set_temp_network(network *net, float t);
 image load_image(char *filename, int w, int h, int c);
 image load_image_color(char *filename, int w, int h);
-image make_image(int w, int h, int c);
 image resize_image(image im, int w, int h);
 image letterbox_image(image im, int w, int h);
 image crop_image(image im, int dx, int dy, int w, int h);
@@ -704,9 +700,25 @@ float *network_predict(network *net, float *input);
 int network_width(network *net);
 int network_height(network *net);
 float *network_predict_image(network *net, image im);
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void network_detect(network *net, image im, float thresh, float hier_thresh, float nms, box *boxes, float **probs);
-int num_boxes(network *net);
+image make_image(int w, int h, int c);
+void free_ptrs(void **ptrs, int n);
+void free_image(image m);
+void free_network(network *net);
 box *make_boxes(network *net);
+int num_boxes(network *net);
+metadata get_metadata(char *file);
+network *load_network(char *cfg, char *weights, int clear);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 void reset_network_state(network *net, int b);
 
@@ -721,7 +733,6 @@ matrix make_matrix(int rows, int cols);
 image get_image_from_stream(CvCapture *cap);
 #endif
 #endif
-void free_image(image m);
 float train_network(network *net, data d);
 pthread_t load_data_in_thread(load_args args);
 void load_data_blocking(load_args args);
@@ -735,7 +746,6 @@ int find_arg(int argc, char* argv[], char *arg);
 char *find_char_arg(int argc, char **argv, char *arg, char *def);
 char *basecfg(char *cfgfile);
 void find_replace(char *str, char *orig, char *rep, char *output);
-void free_ptrs(void **ptrs, int n);
 char *fgetl(FILE *fp);
 void strip(char *s);
 float sec(clock_t clocks);
