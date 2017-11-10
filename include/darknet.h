@@ -652,7 +652,6 @@ void set_batch_network(network *net, int b);
 void set_temp_network(network *net, float t);
 image load_image(char *filename, int w, int h, int c);
 image load_image_color(char *filename, int w, int h);
-image resize_image(image im, int w, int h);
 image letterbox_image(image im, int w, int h);
 image crop_image(image im, int dx, int dy, int w, int h);
 image resize_min(image im, int min);
@@ -695,7 +694,6 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
 matrix network_predict_data(network *net, data test);
 image **load_alphabet();
 image get_network_image(network *net);
-float *network_predict(network *net, float *input);
 
 int network_width(network *net);
 int network_height(network *net);
@@ -705,6 +703,8 @@ float *network_predict_image(network *net, image im);
 extern "C" {
 #endif
 
+float *network_predict(network *net, float *input);
+image resize_image(image im, int w, int h);
 void network_detect(network *net, image im, float thresh, float hier_thresh, float nms, box *boxes, float **probs);
 image make_image(int w, int h, int c);
 void free_ptrs(void **ptrs, int n);
